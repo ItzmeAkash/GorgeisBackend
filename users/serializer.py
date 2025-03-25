@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth import authenticate
@@ -17,6 +18,28 @@ class UserSerializer(serializers.ModelSerializer):
             }
         }
     
+    def validate_date_of_birth(self, value):
+        if isinstance(value, str):
+            date_formats = [
+                '%Y-%m-%d',      # 1999-06-21
+                '%d-%m-%Y',      # 21-06-1999
+                '%m-%d-%Y',      # 06-21-1999
+                '%d/%m/%Y',      # 21/06/1999
+                '%m/%d/%Y',      # 06/21/1999
+                '%d.%m.%Y',      # 21.06.1999
+                '%Y/%m/%d',      # 1999/06/21
+            ]
+            
+            for date_format in date_formats:
+                try:
+                    parsed_date = datetime.datetime.strptime(value, date_format).date()
+                    return parsed_date
+                except ValueError:
+                    continue
+                
+            raise serializers.ValidationError("Invalid date format. Please use YYYY-MM-DD format.")
+        return value
+
         
     # Creating the User
     def create(self, validated_data):

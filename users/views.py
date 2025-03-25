@@ -25,6 +25,41 @@ class UserRegisterView(APIView):
                         status=status.HTTP_409_CONFLICT
                     )
                 
+                # Handle date_of_birth formatting
+                if 'date_of_birth' in request.data and request.data['date_of_birth']:
+                    try:
+                        # Parse date_of_birth in whatever format it comes in
+                        dob_string = request.data['date_of_birth']
+                        
+                        # Try different date formats
+                        import datetime
+                        date_formats = [
+                            '%Y-%m-%d',      # 1999-06-21
+                            '%d-%m-%Y',      # 21-06-1999
+                            '%m-%d-%Y',      # 06-21-1999
+                            '%d/%m/%Y',      # 21/06/1999
+                            '%m/%d/%Y',      # 06/21/1999
+                            '%d.%m.%Y',      # 21.06.1999
+                            '%Y/%m/%d',      # 1999/06/21
+                        ]
+                        
+                        parsed_date = None
+                        for date_format in date_formats:
+                            try:
+                                parsed_date = datetime.datetime.strptime(dob_string, date_format).date()
+                                break
+                            except ValueError:
+                                continue
+                        
+                        if parsed_date:
+                            # Convert to YYYY-MM-DD format
+                            request.data['date_of_birth'] = parsed_date.strftime('%Y-%m-%d')
+                        else:
+                            return Response({'error': 'Invalid date format for date_of_birth'}, 
+                                           status=status.HTTP_400_BAD_REQUEST)
+                    except Exception as e:
+                        return Response({'error': f'Error processing date_of_birth: {str(e)}'}, 
+                                       status=status.HTTP_400_BAD_REQUEST)
                 
                 # Allow partial updates
                 serializer = UserSerializer(data=request.data, partial=True)
@@ -76,15 +111,16 @@ class ViewProfile(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # If the user is authenticated, request.user contains the authenticated user instance
-        user = request.user
-        serializer = UserSerializer(user)
-        
-        response_data = {
-            'username': serializer.data['first_name'],
-        }
-        
-        return Response(response_data)
+        try:
+            # If the user is authenticated, request.user contains the authenticated user instance
+            user = request.user
+            serializer = UserSerializer(user)
+            response_data = {
+                'username': serializer.data['first_name'],
+            }
+            return Response(response_data)
+        except Exception as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
 class LogoutView(APIView):
