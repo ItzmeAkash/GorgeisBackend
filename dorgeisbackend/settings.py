@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework_simplejwt",
+    "drf_yasg",
     "rest_framework",
     "corsheaders",
-    "users"]
+    "users",
+    "products"
+    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -160,10 +163,18 @@ SIMPLE_JWT = {
     
 }
 
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # or your email provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'gorgiebackendtest@gmail.com'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'j@y@l@kshmi#123'       # See step 2 for this
+DEFAULT_FROM_EMAIL = 'gorgiebackendtest@gmail.com'
+FRONTEND_URL = 'https://gorgeis-webapp.vercel.app/'  # Update this to your frontend URL
 
 
-
-
+PRODUCT_SLUG_SECRET_KEY = os.getenv("PRODUCT_SLUG_SECRET_KEY")
 # # AWS S3 settings
 # AWS_ACCESS_KEY_ID = 'your-access-key'
 # AWS_SECRET_ACCESS_KEY = 'your-secret-key'
@@ -174,3 +185,4 @@ SIMPLE_JWT = {
 # # Static files configuration
 # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
