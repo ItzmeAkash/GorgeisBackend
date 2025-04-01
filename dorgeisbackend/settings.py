@@ -164,14 +164,14 @@ SIMPLE_JWT = {
 }
 
 # settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # or your email provider
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'gorgiebackendtest@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'j@y@l@kshmi#123'       # See step 2 for this
-DEFAULT_FROM_EMAIL = 'gorgiebackendtest@gmail.com'
-FRONTEND_URL = 'https://gorgeis-webapp.vercel.app/'  # Update this to your frontend URL
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 
 PRODUCT_SLUG_SECRET_KEY = os.getenv("PRODUCT_SLUG_SECRET_KEY")
@@ -186,3 +186,7 @@ PRODUCT_SLUG_SECRET_KEY = os.getenv("PRODUCT_SLUG_SECRET_KEY")
 # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+]
