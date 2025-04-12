@@ -19,6 +19,7 @@ python-dotenv==1.0.1
 pytz==2025.1
 PyYAML==6.0.2
 rest-framework-simplejwt==0.0.2
+drf-nested-routers==0.94.1
 six==1.17.0
 sqlparse==0.5.3
 uritemplate==4.1.1

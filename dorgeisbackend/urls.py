@@ -41,7 +41,7 @@ urlpatterns = [
     
     # API endpoints
     path("api/users/", include("users.urls")),
-    path("api/products/", include("products.urls")),
+    path("api/", include("products.urls")),
     
     # API Documentation endpoints
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
